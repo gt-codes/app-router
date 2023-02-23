@@ -1,4 +1,4 @@
-import User from '@/components/user';
+import Avatar from '@/components/avatar';
 import { PostType } from '@/lib/types';
 import { Suspense, use } from 'react';
 
@@ -9,17 +9,36 @@ const getPost = async (id: number): Promise<PostType> => {
 	return fetch(`https://jsonplaceholder.typicode.com/posts/${id}`).then((res) => res.json());
 };
 
-function PostUI({ id }: { id: number }) {
+interface Props {
+	id: number;
+}
+
+function PostUI({ id }: Props) {
 	const post = use(getPost(id));
 
 	return (
-		<div className='py-3 flex gap-2 items-center'>
-			<User userId={post.userId} />
+		<>
+			<Avatar userId={post.userId} />
 			<span>{post.title}</span>
-		</div>
+		</>
 	);
 }
 
-export default function Post({ id }: { id: number }) {
-	return <Suspense fallback={<div>Loading...</div>}>{<PostUI id={id} />}</Suspense>;
+const Skeleton = () => {
+	return (
+		<>
+			<div className='h-6 w-6 bg-gray-200 rounded-full animate-pulse' />
+			<div className='h-6 w-32 bg-gray-300 rounded-md animate-pulse' />
+		</>
+	);
+};
+
+export default function Post(props: Props) {
+	return (
+		<div className='py-3 flex gap-2 items-center'>
+			<Suspense fallback={<Skeleton />}>
+				<PostUI {...props} />
+			</Suspense>
+		</div>
+	);
 }
