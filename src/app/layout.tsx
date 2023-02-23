@@ -9,7 +9,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
 			<head />
-			<body className='h-screen w-screen'>
+			<body className='h-screen w-screen flex flex-col'>
 				<Navigation />
 				{children}
 			</body>
